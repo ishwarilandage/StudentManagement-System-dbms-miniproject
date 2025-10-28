@@ -1,9 +1,9 @@
 from flask import Flask,render_template,request,session,redirect,url_for,flash
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy  # pyright: ignore[reportMissingImports]
+from flask_login import UserMixin  # pyright: ignore[reportMissingImports]
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import login_user,logout_user,login_manager,LoginManager
-from flask_login import login_required,current_user
+from flask_login import login_user,logout_user,login_manager,LoginManager  # pyright: ignore[reportMissingImports]
+from flask_login import login_required,current_user  # pyright: ignore[reportMissingImports]
 import json
 
 # MY db connection
@@ -23,7 +23,8 @@ def load_user(user_id):
 
 
 # app.config['SQLALCHEMY_DATABASE_URL']='mysql://username:password@localhost/databas_table_name'
-app.config['SQLALCHEMY_DATABASE_URI']='mysql://root:@localhost/students'
+# For local development without MySQL, use SQLite. Switch back to MySQL when ready.
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///students.db'
 db=SQLAlchemy(app)
 
 # here we will create db models that is tables
@@ -251,5 +252,8 @@ def test():
     except:
         return 'My db is not Connected'
 
+
+with app.app_context():
+    db.create_all()
 
 app.run(debug=True)    
